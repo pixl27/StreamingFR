@@ -51,6 +51,24 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
                 pos = pos + e.start + 1
         return "".join(res)
 
+    def get_request_headers(self, is_post=False):
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8' if is_post else 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Referer': 'https://french-stream.one/',
+            'Origin': 'https://french-stream.one',
+            'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin'
+        }
+        if is_post:
+            headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+        return headers
+
     def handle_api_search(self, params):
         q = params.get('q', [''])[0]
         if not q:
@@ -58,10 +76,7 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         url = 'https://french-stream.one/engine/ajax/search.php'
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
+        headers = self.get_request_headers(is_post=True)
         data = urllib.parse.urlencode({'query': q}).encode('utf-8')
         req = urllib.request.Request(url, data=data, headers=headers)
 
@@ -80,9 +95,7 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
             f'https://french-stream.one/data/eps_{news_id}.txt?v={v}',
             f'https://french-stream.one/ep-data.php?id={news_id}&format=js&v={v}'
         ]
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
+        headers = self.get_request_headers(is_post=False)
         for url in candidates:
             req = urllib.request.Request(url, headers=headers)
             try:
@@ -103,9 +116,7 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         url = f'https://french-stream.one/engine/ajax/film_api.php?id={news_id}'
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
+        headers = self.get_request_headers(is_post=False)
         req = urllib.request.Request(url, headers=headers)
 
         try:
