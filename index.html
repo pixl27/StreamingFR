@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinémathèque — Films & séries, comme au cinéma</title>
+  <meta name="description" content="Cinémathèque : une salle obscure dans votre salon. Films et séries, sélection de la maison." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <!-- Atmosphère : faisceau du projecteur + grain argentique -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos__beam"></div>
+    <div class="atmos__dust"></div>
+    <div class="atmos__grain"></div>
+    <div class="atmos__vignette"></div>
+  </div>
+
+  <!-- Allumage du projecteur (chargement) -->
+  <div class="ignition" aria-hidden="true">
+    <span class="ignition__mark">CINÉMATHÈQUE</span>
+  </div>
+
+  <!-- ===================== NAVIGATION ===================== -->
+  <header class="nav" id="haut">
+    <div class="nav__inner">
+      <a class="brand" href="#haut" aria-label="Cinémathèque, accueil">
+        <span class="brand__lamp" aria-hidden="true"></span>
+        <span class="brand__word">Cinémathèque</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Catégories">
+        <button class="nav__link is-active" data-filtre="tout">À l'affiche</button>
+        <button class="nav__link" data-filtre="film">Films</button>
+        <button class="nav__link" data-filtre="serie">Séries</button>
+        <button class="nav__link" data-filtre="Cinéma français">Made in France</button>
+      </nav>
+
+      <div class="nav__tools">
+        <button class="iconbtn" id="ouvrir-recherche" aria-label="Rechercher">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+        </button>
+        <button class="ticket" id="ouvrir-liste">
+          <span class="ticket__n" id="compteur-liste">0</span>
+          <span>Ma liste</span>
+        </button>
+      </div>
+    </div>
+    <div class="nav__tricolore" aria-hidden="true"></div>
+  </header>
+
+  <main id="contenu">
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" aria-label="Sélection mise en avant">
+      <div class="hero__scope hero__scope--top" aria-hidden="true"></div>
+      <div class="hero__stage" id="hero-stage"><!-- injecté par app.js --></div>
+      <div class="hero__scope hero__scope--bottom" aria-hidden="true"></div>
+      <div class="hero__rail" id="hero-rail" role="tablist" aria-label="Choisir une affiche"></div>
+    </section>
+
+    <!-- ===================== RAILS ===================== -->
+    <div class="rails" id="rails"><!-- injecté par app.js --></div>
+
+    <!-- ===================== MANIFESTE ===================== -->
+    <section class="manifeste" aria-label="La maison">
+      <p class="manifeste__eyebrow">La maison · depuis une salle obscure</p>
+      <h2 class="manifeste__titre">On ne diffuse pas des fichiers.<br/><em>On programme des séances.</em></h2>
+      <p class="manifeste__corps">Chaque affiche est composée à la main, chaque rangée pensée comme une programmation. Pas d'algorithme tapageur : une sélection, une lumière, et le noir qui se fait avant que ça commence.</p>
+      <div class="manifeste__stats">
+        <div class="stat"><span class="stat__num" id="stat-titres">0</span><span class="stat__lab">œuvres au programme</span></div>
+        <div class="stat"><span class="stat__num">4K</span><span class="stat__lab">jusqu'à l'Ultra HD</span></div>
+        <div class="stat"><span class="stat__num">VF · VOST</span><span class="stat__lab">au choix, à la séance</span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== PIED ===================== -->
+  <footer class="pied">
+    <div class="pied__top">
+      <div class="brand brand--pied">
+        <span class="brand__lamp" aria-hidden="true"></span>
+        <span class="brand__word">Cinémathèque</span>
+      </div>
+      <nav class="pied__cols" aria-label="Pied de page">
+        <div class="pied__col"><h3>Programme</h3><a href="#">À l'affiche</a><a href="#">Prochainement</a><a href="#">Le calendrier</a></div>
+        <div class="pied__col"><h3>La maison</h3><a href="#">Notre parti pris</a><a href="#">La rédaction</a><a href="#">Nous écrire</a></div>
+        <div class="pied__col"><h3>Pratique</h3><a href="#">Aide</a><a href="#">Appareils</a><a href="#">Confidentialité</a></div>
+      </nav>
+    </div>
+    <div class="pied__bas">
+      <p>Démonstration de design — catalogue fictif, aucun flux réel. Métadonnées factuelles, synopsis originaux, affiches composées en CSS.</p>
+      <p class="pied__sign">Conçu comme une séance. ✦</p>
+    </div>
+  </footer>
+
+  <!-- ===================== FICHE (modale) ===================== -->
+  <div class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="fiche-titre" hidden>
+    <div class="fiche__voile" data-fermer></div>
+    <div class="fiche__carte" id="fiche-carte"><!-- injecté par app.js --></div>
+  </div>
+
+  <!-- ===================== PROJECTION (lecteur fictif) ===================== -->
+  <div class="salle" id="salle" role="dialog" aria-modal="true" aria-label="Projection" hidden>
+    <div class="salle__inner" id="salle-inner"><!-- injecté par app.js --></div>
+  </div>
+
+  <!-- ===================== RECHERCHE ===================== -->
+  <div class="reche" id="reche" role="dialog" aria-modal="true" aria-label="Recherche" hidden>
+    <div class="reche__voile" data-fermer></div>
+    <div class="reche__panneau">
+      <div class="reche__champ">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+        <input id="reche-input" type="search" placeholder="Un titre, un genre, un réalisateur…" autocomplete="off" aria-label="Rechercher" />
+        <kbd>Échap</kbd>
+      </div>
+      <div class="reche__resultats" id="reche-resultats"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
