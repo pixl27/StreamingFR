@@ -1210,3 +1210,51 @@ input:checked + .slider:before {
   opacity: 1;
 }
 
+/* Fix click blocker bug on mobile WebView (iOS Safari bug) */
+.salle__ecran.has-iframe::after {
+  display: none !important;
+}
+
+/* Mobile responsive layout for player bar and tabs selection */
+@media (max-width: 768px) {
+  .salle__barre {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px;
+    padding: 14px 20px !important;
+  }
+  .salle__controls-left {
+    text-align: center;
+    width: 100%;
+  }
+  .salle__controls-center {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+  }
+  .salle__tabs {
+    width: 100%;
+    justify-content: center;
+  }
+  .salle__tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .salle__episodes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .salle__episode-card {
+    padding: 10px 8px !important;
+    min-height: 52px !important;
+  }
+  .salle__episode-title {
+    font-size: 11px !important;
+  }
+}
+

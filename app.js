@@ -476,6 +476,8 @@
   }
 
   function showSalleLoading(msg) {
+    const ecran = $(".salle__ecran");
+    if (ecran) ecran.classList.remove("has-iframe");
     const mainContent = $("#salle-main-content");
     if (mainContent) {
       mainContent.innerHTML = `
@@ -490,6 +492,8 @@
   }
 
   function renderSearchResults() {
+    const ecran = $(".salle__ecran");
+    if (ecran) ecran.classList.remove("has-iframe");
     const mainContent = $("#salle-main-content");
     if (!mainContent) return;
 
@@ -717,6 +721,9 @@
     if (adblockEnabled) {
       iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
     }
+
+    const ecran = $(".salle__ecran");
+    if (ecran) ecran.classList.add("has-iframe");
 
     mainContent.innerHTML = "";
     mainContent.appendChild(iframe);
