@@ -713,7 +713,7 @@
     const iframe = document.createElement("iframe");
     iframe.src = url;
     iframe.className = "salle__iframe";
-    iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+    iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
     iframe.setAttribute('allowfullscreen', 'true');
     iframe.setAttribute('scrolling', 'no');
     iframe.frameBorder = "0";

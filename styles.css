@@ -1098,6 +1098,13 @@ input:checked + .slider:before {
   border-radius: 999px;
   border: 1px solid var(--line);
   gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  max-width: 100%;
+  flex-wrap: nowrap;
+}
+.salle__tabs::-webkit-scrollbar {
+  display: none;
 }
 .salle__tab-btn {
   background: none;
@@ -1109,6 +1116,8 @@ input:checked + .slider:before {
   border-radius: 999px;
   font-family: var(--mono);
   transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .salle__tab-btn:hover {
   color: var(--ivoire);
@@ -1217,11 +1226,37 @@ input:checked + .slider:before {
 
 /* Mobile responsive layout for player bar and tabs selection */
 @media (max-width: 768px) {
+  .salle__inner {
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .salle__header {
+    position: sticky !important;
+    top: 0;
+    z-index: 100;
+    flex: none !important;
+  }
+  .salle__ecran {
+    flex: 1;
+    min-height: 280px;
+  }
+  .salle__ecran.has-iframe {
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    flex: none !important;
+  }
+  .salle__episodes-selector {
+    flex: none !important;
+    border-top: 1px solid var(--line) !important;
+  }
   .salle__barre {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 16px;
     padding: 14px 20px !important;
+    flex: none !important;
   }
   .salle__controls-left {
     text-align: center;
@@ -1234,24 +1269,25 @@ input:checked + .slider:before {
     gap: 12px;
   }
   .salle__tabs {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    padding: 6px 8px !important;
   }
   .salle__tab-btn {
-    flex: 1;
+    flex: 0 0 auto !important;
     text-align: center;
-    padding: 8px 12px;
+    padding: 8px 16px !important;
   }
 }
 
 @media (max-width: 480px) {
   .salle__episodes-grid {
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-    gap: 8px !important;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 6px !important;
   }
   .salle__episode-card {
     padding: 10px 8px !important;
-    min-height: 52px !important;
+    min-height: 48px !important;
   }
   .salle__episode-title {
     font-size: 11px !important;
