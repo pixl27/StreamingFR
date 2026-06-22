@@ -1075,6 +1075,16 @@
     if (!$$(".fiche, .salle, .reche").some(m => !m.hidden)) document.body.classList.remove("no-scroll");
     if (dernierFocus) dernierFocus.focus();
   }
+  function fermeSalle() {
+    const ecran = $(".salle__ecran");
+    if (ecran) ecran.classList.remove("has-iframe");
+    const mainContent = $("#salle-main-content");
+    if (mainContent) mainContent.innerHTML = "";
+    playerData = null;
+    currentMovieId = null;
+    currentNewsId = null;
+    ferme($("#salle"));
+  }
 
   /* ================= TOAST ================= */
   let toastTimer = null;
@@ -1172,7 +1182,7 @@
       if (playBtn)  { ouvreSalle(playBtn.dataset.play); return; }
       if (listeBtn) { Liste.bascule(listeBtn.dataset.liste); return; }
       if (voirBtn)  { const r = RAILS[+voirBtn.dataset.voir]; renderCollection(r.titre, r.sous, r.filtre); return; }
-      if (fermerS)  { ferme($("#salle")); return; }
+      if (fermerS)  { fermeSalle(); return; }
       if (fermer)   { ferme(fermer.closest(".fiche, .reche")); return; }
       if (ficheBtn) {
         if ($("#reche").hidden === false) {
@@ -1222,7 +1232,7 @@
     // Raccourcis clavier
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        if (!$("#salle").hidden) ferme($("#salle"));
+        if (!$("#salle").hidden) fermeSalle();
         else if (!$("#fiche").hidden) ferme($("#fiche"));
         else if (!$("#reche").hidden) ferme($("#reche"));
       }
