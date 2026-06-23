@@ -155,9 +155,17 @@
   async function searchFrenchStream(query) {
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      return await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      if (data && data.error) {
+        throw new Error(data.message || "Erreur API");
+      }
+      return data;
     } catch (e) {
-      return [];
+      console.warn("searchFrenchStream failed for query:", query, e);
+      throw e;
     }
   }
 
@@ -196,6 +204,8 @@
         }
       } catch (e) {
         console.error(`Failed background search for ${movie.titre}:`, e);
+        console.warn("Stopping background poster loading to avoid spamming the proxy/API.");
+        break;
       }
       await new Promise(r => setTimeout(r, 200));
     }
@@ -542,8 +552,14 @@
     showSalleLoading(`Recherche de "${query}" sur French Stream...`);
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
       const items = await response.json();
-      searchResultItems = items;
+      if (items && items.error) {
+        throw new Error(items.message || "Erreur API");
+      }
+      searchResultItems = Array.isArray(items) ? items : [];
       renderSearchResults();
     } catch (e) {
       const mainContent = $("#salle-main-content");
@@ -1034,13 +1050,20 @@
 
       try {
         const response = await fetch(`/api/search?q=${encodeURIComponent(n)}`, { signal });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
         const items = await response.json();
+        if (items && items.error) {
+          throw new Error(items.message || "Erreur API");
+        }
+        const itemsArray = Array.isArray(items) ? items : [];
         
         let liveHtml = "";
-        if (items && items.length > 0) {
+        if (itemsArray && itemsArray.length > 0) {
           liveHtml += `
             <div class="reche__section-title">Résultats French Stream</div>
-            ${items.slice(0, 6).map(item => `
+            ${itemsArray.slice(0, 6).map(item => `
               <button class="reche__item" data-search-play="${item.id}" data-search-title="${item.title}">
                 <span class="reche__vig" style="background-image: url('${item.poster}')"></span>
                 <span class="reche__info">
@@ -1057,6 +1080,7 @@
       } catch (e) {
         if (e.name !== 'AbortError') {
           console.error("Live search failed:", e);
+          box.innerHTML = html + `<p class="reche__vide" style="color: #ff6b6b; padding: 12px 20px;">Erreur de connexion : ${e.message}</p>`;
         }
       }
     }, 300);

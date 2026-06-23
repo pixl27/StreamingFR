@@ -81,7 +81,7 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
         req = urllib.request.Request(url, data=data, headers=headers)
 
         try:
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=6) as response:
                 html = self.decode_response(response.read())
                 items = self.parse_search_html(html)
                 self.send_json(items)
@@ -120,7 +120,7 @@ class ProxyAndFileHandler(http.server.SimpleHTTPRequestHandler):
         req = urllib.request.Request(url, headers=headers)
 
         try:
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=6) as response:
                 body_str = self.decode_response(response.read())
                 data = json.loads(body_str)
                 
@@ -194,8 +194,8 @@ ProxyAndFileHandler.extensions_map.update({
 print(f"Cinémathèque - Démarrage du serveur sur http://localhost:{PORT}")
 print("Pour quitter, appuyez sur Ctrl+C")
 
-socketserver.TCPServer.allow_reuse_address = True
-with socketserver.TCPServer(("", PORT), ProxyAndFileHandler) as httpd:
+socketserver.ThreadingTCPServer.allow_reuse_address = True
+with socketserver.ThreadingTCPServer(("", PORT), ProxyAndFileHandler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
